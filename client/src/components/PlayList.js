@@ -2,18 +2,19 @@ import React, { Component } from 'react';
 import { Container, ListGroup, ListGroupItem, Button } from 'reactstrap';
 import { CSSTransistion, TransistionGroup } from 'react-transition-group';
 import uuid from 'uuid';
+import { connect } from 'react-redux';
+import { getSongs } from '../actions/songActions';
+
+import PropTypes from "prop-types";
 
 class PlayList extends Component {
-    state = {
-        songs: [
-            { id: uuid(), name: 'Adonis'},
-            { id: uuid(), name: 'Megaburn'},
-            { id: uuid(), name: 'Bohemian'}
-        ]
+
+    componentDidMount(){
+        this.props.getSongs();
     }
 
     render() {
-        const { songs } = this.state;
+        const { songs } = this.props.song;
         return(
             <Container>
                 <Button
@@ -52,4 +53,13 @@ class PlayList extends Component {
     }
 }
 
-export default PlayList;
+PlayList.propTypes = {
+    getSongs: PropTypes.func.isRequired,
+    song: PropTypes.object.isRequired
+}
+
+const maoStateToProps = (state) => ({
+    song: state.song
+});
+
+export default connect(maoStateToProps, {getSongs} )(PlayList);
