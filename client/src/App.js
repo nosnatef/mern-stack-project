@@ -5,6 +5,7 @@ import AppNavbar from "./components/AppNavbar";
 import PlayList from './components/PlayList';
 import SongModal from './components/SongModal';
 import PlayListCard from './components/PlayListCard';
+import PlayListMain from './components/PlayListMain';
 import { Container, Row, Col } from 'reactstrap';
 import './App.css';
 
@@ -14,16 +15,12 @@ import store from './store';
 class App extends Component {
   render() {
     return (
+      <Provider store={store}>
       <div className="App">
         <AppNavbar />
-        <Container>
-          <Row>
-            <PlayListCard />
-            <PlayListCard />
-          </Row>
-        </Container>
-        
+        <PlayListMain />
       </div>
+      </Provider>
       
       //comment out the old playlist app
       /*

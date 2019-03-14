@@ -1,11 +1,25 @@
 import React,{ Component } from 'react';
 import { Card, CardImg, CardText, CardBody,
-  CardTitle, CardSubtitle, Button } from 'reactstrap';
+  CardTitle, CardSubtitle, Button, Fade } from 'reactstrap';
 
 class PlayListCard extends Component{
+
+    constructor(props) {
+        super(props);
+        this.state = { fadeIn: true };
+        this.toggle = this.toggle.bind(this);
+    }
+
+    toggle() {
+        this.setState({
+            fadeIn: !this.state.fadeIn
+        });
+    }
+
     render(){
         return(
             <div style={{margin: '2rem'}}>
+            <Fade in={this.state.fadeIn} className='mt-3'>
                 <Card>
                     
                         <CardBody>
@@ -15,6 +29,7 @@ class PlayListCard extends Component{
                             <Button>Enter</Button>
                         </CardBody>
                 </Card>
+            </Fade>
             </div>
         );
     }
