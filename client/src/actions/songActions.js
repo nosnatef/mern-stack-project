@@ -5,3 +5,10 @@ export const getSongs = () => {
         type: GET_SONGS
     };
 };
+
+export const deleteSong = (id) => {
+    return{
+        type: DELETE_SONG,
+        payload: id
+    };
+};

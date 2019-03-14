@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { Container, ListGroup, ListGroupItem, Button } from 'reactstrap';
 import { CSSTransistion, TransistionGroup } from 'react-transition-group';
-import uuid from 'uuid';
 import { connect } from 'react-redux';
-import { getSongs } from '../actions/songActions';
+import { getSongs, deleteSong } from '../actions/songActions';
 
 import PropTypes from "prop-types";
 
@@ -11,6 +10,10 @@ class PlayList extends Component {
 
     componentDidMount(){
         this.props.getSongs();
+    }
+
+    onDeleteClick = (id) => {
+        this.props.deleteSong(id);
     }
 
     render() {
@@ -37,11 +40,7 @@ class PlayList extends Component {
                                 className="remove-btn"
                                 color="danger"
                                 size="sm"
-                                onClick={() => {
-                                    this.setState(state => ({
-                                        songs: state.songs.filter(song => song.id !== id)
-                                    }));
-                                }}
+                                onClick={this.onDeleteClick.bind(this,id)}
                             >
                             &times;
                             </Button>
@@ -58,8 +57,8 @@ PlayList.propTypes = {
     song: PropTypes.object.isRequired
 }
 
-const maoStateToProps = (state) => ({
+const mapStateToProps = (state) => ({
     song: state.song
 });
 
-export default connect(maoStateToProps, {getSongs} )(PlayList);
+export default connect(mapStateToProps, {getSongs, deleteSong} )(PlayList);
