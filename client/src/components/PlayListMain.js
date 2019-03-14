@@ -1,6 +1,6 @@
 import React,{ Component } from 'react';
 import PlayListCard from "./PlayListCard"
-import { Container, Row, Col } from 'reactstrap';
+import { Container, Row, Col, Button } from 'reactstrap';
 import { connect } from 'react-redux';
 import { getPlaylists } from '../actions/playListActions';
 import PropTypes from "prop-types";
@@ -62,6 +62,9 @@ class PlayListMain extends Component{
     render(){
         return(
             <div>
+                <Button
+                    onClick={() => window.location='http://localhost:5000/login'}
+                >Sign in</Button>
                 <UserName />
                 <Container>
                     <PlayListCounter />

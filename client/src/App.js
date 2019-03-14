@@ -13,6 +13,11 @@ import { Provider } from 'react-redux';
 import store from './store';
 
 class App extends Component {
+
+  state={
+    login: false
+  }
+
   render() {
     return (
       <Provider store={store}>
@@ -21,7 +26,6 @@ class App extends Component {
         <PlayListMain />
       </div>
       </Provider>
-      
       //comment out the old playlist app
       /*
       <Provider store={store}>
