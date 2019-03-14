@@ -3,6 +3,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import AppNavbar from "./components/AppNavbar";
 import PlayList from './components/PlayList';
+import SongModal from './components/SongModal';
+import { Container } from 'reactstrap';
 import './App.css';
 
 import { Provider } from 'react-redux';
@@ -14,7 +16,10 @@ class App extends Component {
       <Provider store={store}>
       <div className="App">
         <AppNavbar />
-        <PlayList />
+        <Container>
+          <SongModal />
+          <PlayList />
+        </Container>
       </div>
       </Provider>
     );

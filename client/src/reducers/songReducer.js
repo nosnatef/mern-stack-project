@@ -1,25 +1,34 @@
 import uuid from 'uuid';
-import { GET_SONGS, ADD_SONG, DELETE_SONG } from '../actions/types';
+import { GET_SONGS, ADD_SONG, DELETE_SONG, SONGS_LOADING } from '../actions/types';
 
 const initialState = {
-    songs: [
-        { id: uuid(), name: 'Adonis'},
-        { id: uuid(), name: 'Megaburn'},
-        { id: uuid(), name: 'Bohemian'}
-    ]
+    songs: [],
+    loading: false
 };
 
 export default function(state = initialState, action){
     switch(action.type){
         case GET_SONGS:
             return{
-                ...state
+                ...state,
+                songs: action.payload,
+                loading: false
             };
         case DELETE_SONG:
             return{
                 ...state,
-                songs: state.songs.filter(song => song.id != action.payload)
-            }
+                songs: state.songs.filter(song => song.id !== action.payload)
+            };
+        case ADD_SONG:
+            return {
+                ...state,
+                songs: [action.payload, ...state.songs]
+            };
+        case SONGS_LOADING:
+            return{
+                ...state,
+                loading: true
+            };
         default:
             return state;
     }
