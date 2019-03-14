@@ -13,18 +13,24 @@ export const getSongs = () => dispatch => {
         );
 };
 
-export const addSong = (song) => {
-    return{
-        type: ADD_SONG,
-        payload: song
-    };
+export const addSong = song => dispatch => {
+    axios
+        .post('/api/songs', song)
+        .then(res => dispatch(
+            {
+                type: ADD_SONG,
+                payload: res.data
+            }
+        ))
 };
 
-export const deleteSong = (id) => {
-    return{
-        type: DELETE_SONG,
-        payload: id
-    };
+export const deleteSong = id => dispatch => {
+    axios.delete(`/api/songs/${id}`).then(
+        res => dispatch({
+            type:DELETE_SONG,
+            payload: id
+        })
+    )
 };
 
 export const setSongsLoading = () => {

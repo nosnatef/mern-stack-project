@@ -11,7 +11,6 @@ import{
 } from "reactstrap";
 import { connect } from 'react-redux';
 import { addSong } from "../actions/songActions";
-import uuid from 'uuid';
 
 class SongModal extends Component{
     state = {
@@ -33,7 +32,6 @@ class SongModal extends Component{
         e.preventDefault();
 
         const newSong = {
-            id: uuid(),
             name: this.state.name
         }
 

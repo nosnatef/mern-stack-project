@@ -19,14 +19,14 @@ class PlayList extends Component {
         return(
             <Container>
                 <ListGroup>
-                    {songs.map(({id, name}) => (
+                    {songs.map(({_id, name}) => (
                         <ListGroupItem>
                             {name}
                             <Button
                                 className="remove-btn"
                                 color="danger"
                                 size="sm"
-                                onClick={this.onDeleteClick.bind(this,id)}
+                                onClick={this.onDeleteClick.bind(this,_id)}
                             >
                             &times;
                             </Button>

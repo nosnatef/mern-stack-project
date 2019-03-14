@@ -1,4 +1,3 @@
-import uuid from 'uuid';
 import { GET_SONGS, ADD_SONG, DELETE_SONG, SONGS_LOADING } from '../actions/types';
 
 const initialState = {
@@ -17,7 +16,7 @@ export default function(state = initialState, action){
         case DELETE_SONG:
             return{
                 ...state,
-                songs: state.songs.filter(song => song.id !== action.payload)
+                songs: state.songs.filter(song => song._id !== action.payload)
             };
         case ADD_SONG:
             return {
