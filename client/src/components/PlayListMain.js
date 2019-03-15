@@ -4,6 +4,7 @@ import { Container, Row, Col, Button } from 'reactstrap';
 import { connect } from 'react-redux';
 import { getPlaylists } from '../actions/playListActions';
 import PropTypes from "prop-types";
+import querystring from 'query-string';
 
 class PlayListCounter extends Component{
     render(){
@@ -29,7 +30,7 @@ class UserName extends Component{
     render(){
         return(
             <div>
-                <h1>My Playlists</h1>
+                <h1>{this.props.name}'s Playlists</h1>
             </div>
         );
     }
@@ -52,10 +53,28 @@ class Filter extends Component{
 class PlayListMain extends Component{
 
     componentDidMount(){
-        this.props.getPlaylists();
+        let parsed = querystring.parse(window.location.search);
+        let accessToken = parsed.access_token;
+
+        fetch('https://api.spotify.com/v1/me', {
+            headers: {'Authorization' : 'Bearer ' + accessToken}
+        }).then((res) => res.json()
+        ).then(
+            data => {
+                this.setState(
+                    {
+                        apiData:{
+                            name:data.display_name
+                        }
+                    }
+                )
+                console.log(this.state);
+            }
+        )
     }
 
     state = {
+        apiData: {},
         filterString: ''
     }
 
@@ -65,7 +84,7 @@ class PlayListMain extends Component{
                 <Button
                     onClick={() => window.location='http://localhost:5000/login'}
                 >Sign in</Button>
-                <UserName />
+                <UserName name={this.state.apiData.name} />
                 <Container>
                     <PlayListCounter />
                     <PlayTimeCounter />
