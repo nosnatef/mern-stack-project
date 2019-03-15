@@ -88,7 +88,7 @@ class PlayListMain extends Component{
 
     render(){
         
-        let playlistToRender = this.state.apiData && this.state.playlistData ? this.state.playlistData.items.filter(item => item.name.toLowerCase().includes(
+        let playlistToRender = this.state.apiData && this.state.playlistData && this.state.playlistData.items ? this.state.playlistData.items.filter(item => item.name.toLowerCase().includes(
             this.state.filterString.toLowerCase()))
             : []
         console.log(playlistToRender);
