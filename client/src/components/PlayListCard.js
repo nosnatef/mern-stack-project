@@ -17,13 +17,14 @@ class PlayListCard extends Component{
     }
 
     render(){
+        console.log(this.props.playlist)
         return(
             <div style={{margin: '2rem'}}>
             <Fade in={this.state.fadeIn} className='mt-3'>
                 <Card>
-                    
+                        <CardImg top width="100%" src={this.props.playlist.images[0].url} alt="Card image cap" />
                         <CardBody>
-                            <CardTitle>PlayList1</CardTitle>
+                            <CardTitle>{this.props.playlist.name}</CardTitle>
                             <CardSubtitle>Playlist1 Create Time</CardSubtitle>
                             <CardText>Playlist1 Des</CardText>
                             <Button>Enter</Button>

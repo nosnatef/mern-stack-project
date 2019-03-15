@@ -56,6 +56,7 @@ class PlayListMain extends Component{
         let parsed = querystring.parse(window.location.search);
         let accessToken = parsed.access_token;
 
+        //get meta data here
         fetch('https://api.spotify.com/v1/me', {
             headers: {'Authorization' : 'Bearer ' + accessToken}
         }).then((res) => res.json()
@@ -71,6 +72,13 @@ class PlayListMain extends Component{
                 console.log(this.state);
             }
         )
+
+        fetch('https://api.spotify.com/v1/me/playlists',{
+            headers:{'Authorization': 'Bearer ' + accessToken}
+        }).then((res)=>res.json()
+        ).then(data => this.setState({
+            playlistData: data
+        }));
     }
 
     state = {
@@ -79,6 +87,12 @@ class PlayListMain extends Component{
     }
 
     render(){
+        
+        let playlistToRender = this.state.apiData && this.state.playlistData ? this.state.playlistData.items.filter(item => item.name.toLowerCase().includes(
+            this.state.filterString.toLowerCase()))
+            : []
+        console.log(playlistToRender);
+        
         return(
             <div>
                 <Button
@@ -94,8 +108,9 @@ class PlayListMain extends Component{
                 />
                 <Container>
                 <Row>
-                    <PlayListCard />
-                    <PlayListCard />
+                {playlistToRender.map(playlist =>
+                    <PlayListCard playlist={playlist} />    
+                )}
                 </Row>
                 </Container>
             </div>
