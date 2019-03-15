@@ -96,7 +96,10 @@ class PlayListMain extends Component{
         return(
             <div>
                 <Button
-                    onClick={() => window.location='http://localhost:5000/login'}
+                    onClick={() => window.location= window.location.href.includes('localhost')
+                        ?'http://localhost:5000/login'
+                        : 'https://guzspotify.herokuapp.com/login'
+                    }
                 >Sign in</Button>
                 <UserName name={this.state.apiData.name} />
                 <Container>
