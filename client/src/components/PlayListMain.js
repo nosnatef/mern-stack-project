@@ -113,8 +113,14 @@ class PlayListMain extends Component{
     }
 
     render(){
-        let playlistToRender = this.state.apiData && this.state.playlistData ? this.state.playlistData.filter(item => item.name.toLowerCase().includes(
-            this.state.filterString.toLowerCase()))
+        let playlistToRender = this.state.apiData && this.state.playlistData ? this.state.playlistData.filter(item => {
+            let matchTitle = item.name.toLowerCase().includes(
+            this.state.filterString.toLowerCase());
+            let matchTrack = item.trackDatas.find(song => song.name.toLowerCase().includes(
+                this.state.filterString.toLowerCase()
+            ));
+            return matchTitle || matchTrack;
+        })
             : []
         let playlistCount = playlistToRender.length;
         let playlistTotalTime = playlistToRender.map(playlist => {
@@ -125,8 +131,7 @@ class PlayListMain extends Component{
            return trackTime;
         }).reduce((a,b) => a+b,0);
         let finalTime =(playlistTotalTime / 3600000).toFixed(2);
-        console.log(finalTime);
-        //console.log(playlistToRender);
+        console.log(playlistToRender);
         return(
             <div>
                 <Button
