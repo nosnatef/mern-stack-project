@@ -17,7 +17,7 @@ class PlayListCard extends Component{
     }
 
     render(){
-        console.log(this.props.playlist)
+        //console.log(this.props.playlist)
         return(
             <div style={{margin: '2rem'}}>
             <Fade in={this.state.fadeIn} className='mt-3'>
@@ -25,8 +25,8 @@ class PlayListCard extends Component{
                         <CardImg top width="100%" src={this.props.playlist.images[0].url} alt="Card image cap" />
                         <CardBody>
                             <CardTitle>{this.props.playlist.name}</CardTitle>
-                            <CardSubtitle>Playlist1 Create Time</CardSubtitle>
-                            <CardText>Playlist1 Des</CardText>
+                            <CardSubtitle>{this.props.playlist.trackDatas[0].artists[0].name}</CardSubtitle>
+                            <CardText>{this.props.playlist.trackDatas[0].name}</CardText>
                             <Button>Enter</Button>
                         </CardBody>
                 </Card>

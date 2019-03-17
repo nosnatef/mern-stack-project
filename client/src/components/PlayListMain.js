@@ -10,7 +10,7 @@ class PlayListCounter extends Component{
     render(){
         return(
             <div>
-                <h2>10 Playlist</h2>
+                <h2>{this.props.length} Playlist</h2>
             </div>
         );
     }
@@ -20,7 +20,7 @@ class PlayTimeCounter extends Component{
     render(){
         return(
             <div>
-                <h2>10 hours</h2>
+                <h2>{this.props.time} hours</h2>
             </div>
         );
     }
@@ -69,16 +69,42 @@ class PlayListMain extends Component{
                         }
                     }
                 )
-                console.log(this.state);
             }
         )
 
         fetch('https://api.spotify.com/v1/me/playlists',{
             headers:{'Authorization': 'Bearer ' + accessToken}
         }).then((res)=>res.json()
-        ).then(data => this.setState({
-            playlistData: data
-        }));
+        ).then(data=>{
+            let playlists = data.items;
+            if(!playlists){
+                return [];
+            }
+            let trackDataPromises = playlists.map(playlist => {
+                let responsePromise = fetch(playlist.tracks.href, {
+                    headers: {'Authorization': 'Bearer ' + accessToken}
+                })
+                let trackDataPromise = responsePromise
+                    .then(response => response.json());
+                return trackDataPromise;
+            });
+            let allTracksDataPromises = 
+                Promise.all(trackDataPromises);
+
+            let playlistsPromise = allTracksDataPromises.then(trackDatas => {
+                trackDatas.forEach((trackData, i) => {
+                    playlists[i].trackDatas = trackData.items.map(item => item.track);
+                });
+                return playlists
+            });
+            return playlistsPromise;
+            
+        })
+        .then(data => {
+            this.setState({
+                playlistData: data
+            })
+    });
     }
 
     state = {
@@ -87,12 +113,20 @@ class PlayListMain extends Component{
     }
 
     render(){
-        
-        let playlistToRender = this.state.apiData && this.state.playlistData && this.state.playlistData.items ? this.state.playlistData.items.filter(item => item.name.toLowerCase().includes(
+        let playlistToRender = this.state.apiData && this.state.playlistData ? this.state.playlistData.filter(item => item.name.toLowerCase().includes(
             this.state.filterString.toLowerCase()))
             : []
-        console.log(playlistToRender);
-        
+        let playlistCount = playlistToRender.length;
+        let playlistTotalTime = playlistToRender.map(playlist => {
+           let trackTotalTime = playlist.trackDatas.map(track => {
+               return track.duration_ms;
+           });
+           let trackTime = trackTotalTime.reduce((a,b) => a+b);
+           return trackTime;
+        }).reduce((a,b) => a+b,0);
+        let finalTime =(playlistTotalTime / 3600000).toFixed(2);
+        console.log(finalTime);
+        //console.log(playlistToRender);
         return(
             <div>
                 <Button
@@ -103,8 +137,10 @@ class PlayListMain extends Component{
                 >Sign in</Button>
                 <UserName name={this.state.apiData.name} />
                 <Container>
-                    <PlayListCounter />
-                    <PlayTimeCounter />
+                    <ul>
+                        <li><PlayListCounter length={playlistCount} /></li>
+                        <li><PlayTimeCounter time={finalTime}/></li>
+                    </ul>
                 </Container>
                 <Filter
                     onTextChange={text => this.setState({filterString:text})}

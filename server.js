@@ -3,6 +3,9 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const path = require('path');
 
+const dotenv = require('dotenv');
+dotenv.config();
+
 let request = require('request')
 let querystring = require('querystring')
 
