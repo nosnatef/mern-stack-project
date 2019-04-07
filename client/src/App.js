@@ -23,7 +23,7 @@ class App extends Component {
       <Provider store={store}>
       <div className="App">
         <AppNavbar />
-        <PlayListMain />
+        <PlayListMain isLogin={this.state.login} />
       </div>
       </Provider>
       //comment out the old playlist app

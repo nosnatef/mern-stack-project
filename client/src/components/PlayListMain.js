@@ -41,7 +41,7 @@ class Filter extends Component{
         return(
             <div>
                 <img />
-                <input type="text" onKeyUp = {
+                <input type="text" placeholder="search playlist" onKeyUp = {
                     event =>
                         this.props.onTextChange(event.target.value)
                 } />
@@ -52,13 +52,19 @@ class Filter extends Component{
 
 class PlayListMain extends Component{
 
+    state = {
+        isLogin : this.props.isLogin
+    }
+
     componentDidMount(){
+        
         let parsed = querystring.parse(window.location.search);
         let accessToken = parsed.access_token;
 
         //get meta data here
         fetch('https://api.spotify.com/v1/me', {
-            headers: {'Authorization' : 'Bearer ' + accessToken}
+            headers: {'Authorization' : 'Bearer ' + accessToken
+                     }
         }).then((res) => res.json()
         ).then(
             data => {
@@ -72,13 +78,20 @@ class PlayListMain extends Component{
             }
         )
 
-        fetch('https://api.spotify.com/v1/me/playlists',{
+        fetch('https://api.spotify.com/v1/me/playlists?limit=50',{
             headers:{'Authorization': 'Bearer ' + accessToken}
         }).then((res)=>res.json()
         ).then(data=>{
+            console.log(data);
             let playlists = data.items;
             if(!playlists){
                 return [];
+            }
+            else{
+                //get rid of the button
+                this.setState({
+                    isLogin:true
+                });
             }
             let trackDataPromises = playlists.map(playlist => {
                 let responsePromise = fetch(playlist.tracks.href, {
@@ -113,6 +126,21 @@ class PlayListMain extends Component{
     }
 
     render(){
+        //delete the button when logged in
+        let button;
+        console.log(this.props.isLogin);
+        if(this.state.isLogin){
+            button = <div></div>;
+        }
+        else{
+            button = <Button
+            onClick={() => window.location= window.location.href.includes('localhost')
+                ?'http://localhost:5000/login'
+                : 'https://guzspotify.herokuapp.com/login'
+            }
+            >Sign in</Button>;
+        }
+
         let playlistToRender = this.state.apiData && this.state.playlistData ? this.state.playlistData.filter(item => {
             let matchTitle = item.name.toLowerCase().includes(
             this.state.filterString.toLowerCase());
@@ -134,12 +162,7 @@ class PlayListMain extends Component{
         console.log(playlistToRender);
         return(
             <div>
-                <Button
-                    onClick={() => window.location= window.location.href.includes('localhost')
-                        ?'http://localhost:5000/login'
-                        : 'https://guzspotify.herokuapp.com/login'
-                    }
-                >Sign in</Button>
+                {button}
                 <UserName name={this.state.apiData.name} />
                 <Container>
                     <ul>
